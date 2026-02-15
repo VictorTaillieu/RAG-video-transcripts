@@ -1,0 +1,16 @@
+[project]
+name = "rag-video-transcripts"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Victor Taillieu",email = "vic8.taillieu@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

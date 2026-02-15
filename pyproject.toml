@@ -6,8 +6,10 @@ authors = [
     {name = "Victor Taillieu",email = "vic8.taillieu@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.14,<3.15"
 dependencies = [
+    "requests (>=2.32.5,<3.0.0)",
+    "youtube-transcript-api (>=1.2.4,<2.0.0)"
 ]
 
 

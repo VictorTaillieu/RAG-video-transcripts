@@ -45,7 +45,7 @@ def main(video_ids):
 
         document = {
             **metadata,
-            "transcript": transcript,
+            "transcript": transcript
         }
 
         with open(f"data/{video_id}.json", "w", encoding="utf-8") as file:

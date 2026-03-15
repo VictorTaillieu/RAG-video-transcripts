@@ -1,2 +1,4 @@
 poetry.lock
 data/
+chroma_db/
+.vscode/

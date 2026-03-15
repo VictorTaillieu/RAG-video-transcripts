@@ -5,7 +5,6 @@ import shutil
 from pathlib import Path
 
 from langchain_chroma import Chroma
-# from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -13,6 +12,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 80
 # 800/80 800/150 1000/150
+EMBEDDING_MODEL = "intfloat/multilingual-e5-base"
 CHROMA_PATH = "chroma_db"
 
 
@@ -57,7 +57,7 @@ def embedding_function():
     Create and return the embedding function.
     """
     embeddings = HuggingFaceEmbeddings(
-        model_name="intfloat/multilingual-e5-base",
+        model_name=EMBEDDING_MODEL,
         encode_kwargs={"normalize_embeddings": True}
     )
     return embeddings

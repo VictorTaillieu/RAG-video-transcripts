@@ -1,4 +1,6 @@
 poetry.lock
+__pycache__/
 data/
 chroma_db/
 .vscode/
+.env

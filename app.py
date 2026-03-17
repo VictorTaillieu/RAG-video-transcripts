@@ -37,7 +37,7 @@ def main():
             st.warning("Veuillez entrer une question.")
         else:
             with st.spinner("Recherche en cours...", show_time=True):
-                response, sources, scores = query_rag(query, llm_backend)
+                response, results = query_rag(query, llm_backend)
 
                 st.subheader("Réponse")
                 st.write(response)
@@ -45,9 +45,11 @@ def main():
                 st.divider()
 
                 st.subheader("Sources")
-                for (chunk_id, chunk_content), chunk_score in zip(sources.items(), scores):
-                    with st.expander(f"{chunk_id} (score: {chunk_score:.3f})"):
-                        st.write(chunk_content)
+                for chunk, score in results:
+                    title = chunk.metadata.get("title")
+                    author = chunk.metadata.get("creator")
+                    with st.expander(f"{title} - {author} (score : {score:.3f})"):
+                        st.write(chunk.page_content.removeprefix("passage: "))
 
 
 if __name__ == "__main__":

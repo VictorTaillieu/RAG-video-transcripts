@@ -51,12 +51,7 @@ def query_rag(query_text: str, llm_backend: str) -> str:
     model = select_llm_backend(llm_backend)
     response = model.invoke(prompt)
 
-    sources = {doc.metadata.get("id", None): doc.page_content.removeprefix("passage: ") for doc, _ in results}
-    scores = [score for _, score in results]
-    formatted_response = f"Response: {response}\nSources: {list(sources.keys())}"
-    print(formatted_response)
-
-    return response, sources, scores
+    return response, results
 
 
 def select_llm_backend(llm_backend: str):

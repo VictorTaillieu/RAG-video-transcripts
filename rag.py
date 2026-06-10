@@ -64,6 +64,7 @@ def select_llm_backend(llm_backend: str):
         return OpenAI(
             model="mistral-small-3.2-24b-instruct",
             temperature=0,
+            max_tokens=1024,
             base_url=MAMMOUTH_API_BASE,
             api_key=MAMMOUTH_API_KEY
         )

@@ -82,4 +82,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    query_rag(args.query, args.llm_backend)
+    print(query_rag(args.query, args.llm_backend)[0])

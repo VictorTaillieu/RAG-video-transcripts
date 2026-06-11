@@ -8,6 +8,7 @@ from langchain_openai import ChatOpenAI
 
 from rag_app.config import settings
 from rag_app.populate_database import embedding_function
+from rag_app.prompts.loader import Prompt, load_prompt
 
 
 def query_rag(
@@ -26,7 +27,8 @@ def query_rag(
     context_text = "\n\n---\n\n".join(
         [doc.page_content.removeprefix("passage: ") for doc, _ in results]
     )
-    prompt = PROMPT_TEMPLATE.format(context=context_text, question=query_text)
+    prompt_template = load_prompt(Prompt.QA)
+    prompt = prompt_template.format(context=context_text, question=query_text)
 
     model = select_llm_backend(llm_backend)
     response = str(model.invoke(prompt).content)

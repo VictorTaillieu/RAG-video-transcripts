@@ -1,32 +1,13 @@
 from langchain_ollama import OllamaLLM
 
+from rag_app.prompts.loader import Prompt, load_prompt
 from rag_app.rag import query_rag
-
-EVAL_PROMPT = """Tu es un évaluateur strict et factuel.
-
-Règles :
-- Compare la RÉPONSE ATTENDUE et la RÉPONSE OBTENUE.
-- Considère la réponse correcte si elle contient les mêmes informations factuelles essentielles,
-  même si la formulation est différente.
-- La réponse est incorrecte si elle :
-  - contredit la réponse attendue
-  - invente des informations absentes
-  - omet une information essentielle
-- Si la réponse attendue est "Je ne sais pas", la réponse est correcte uniquement si elle dit aussi "Je ne sais pas".
-
-RÉPONSE ATTENDUE :
-{expected_response}
-
-RÉPONSE OBTENUE :
-{actual_response}
-
-Réponds uniquement par : true ou false.
-"""
 
 
 def query_and_validate(question: str, expected_response: str) -> bool:
     response = query_rag(question, "openai")[0]
-    prompt = EVAL_PROMPT.format(
+    eval_prompt = load_prompt(Prompt.EVAL)
+    prompt = eval_prompt.format(
         expected_response=expected_response, actual_response=response
     )
 

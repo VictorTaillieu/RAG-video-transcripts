@@ -3,15 +3,17 @@ import os
 
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
+from langchain_core.documents import Document
 from langchain_ollama import OllamaLLM
 from langchain_openai import OpenAI
+from pydantic import SecretStr
 
 from populate_database import CHROMA_PATH, embedding_function
 
 load_dotenv()
 
 MAMMOUTH_API_BASE = "https://api.mammouth.ai/v1"
-MAMMOUTH_API_KEY = os.environ["MAMMOUTH_API_KEY"]
+MAMMOUTH_API_KEY = SecretStr(os.environ["MAMMOUTH_API_KEY"])
 PROMPT_TEMPLATE = """Tu es un assistant précis et factuel.
 
 Règles :
@@ -29,24 +31,20 @@ RÉPONSE :
 """
 
 
-def query_rag(query_text: str, llm_backend: str) -> str:
+def query_rag(
+    query_text: str, llm_backend: str
+) -> tuple[str, list[tuple[Document, float]]]:
     """
     Query the RAG system and return the response.
     """
-    db = Chroma(
-        persist_directory=CHROMA_PATH,
-        embedding_function=embedding_function()
-    )
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function())
 
     results = db.similarity_search_with_score("query: " + query_text, k=5)
 
     context_text = "\n\n---\n\n".join(
         [doc.page_content.removeprefix("passage: ") for doc, _ in results]
     )
-    prompt = PROMPT_TEMPLATE.format(
-        context=context_text,
-        question=query_text
-    )
+    prompt = PROMPT_TEMPLATE.format(context=context_text, question=query_text)
 
     model = select_llm_backend(llm_backend)
     response = model.invoke(prompt)
@@ -66,7 +64,7 @@ def select_llm_backend(llm_backend: str):
             temperature=0,
             max_tokens=1024,
             base_url=MAMMOUTH_API_BASE,
-            api_key=MAMMOUTH_API_KEY
+            api_key=MAMMOUTH_API_KEY,
         )
     else:
         raise ValueError(f"Unsupported LLM backend: {llm_backend}")
@@ -79,8 +77,9 @@ if __name__ == "__main__":
         "--llm-backend",
         choices=["ollama", "openai"],
         default="ollama",
-        help="LLM backend to use."
+        help="LLM backend to use.",
     )
     args = parser.parse_args()
 
-    print(query_rag(args.query, args.llm_backend)[0])
+    response, results = query_rag(args.query, args.llm_backend)
+    print(response)

@@ -4,7 +4,7 @@ from rag import query_rag
 
 LLM_BACKEND_TO_MODEL = {
     "ollama": "mistral:7b",
-    "openai": "mistral-small-3.2-24b-instruct"
+    "openai": "mistral-small-3.2-24b-instruct",
 }
 
 
@@ -15,9 +15,7 @@ def main():
     st.sidebar.header("Paramètres")
 
     llm_backend = st.sidebar.selectbox(
-        "Backend LLM",
-        ["ollama", "openai"],
-        help="ollama = local | openai = api"
+        "Backend LLM", ["ollama", "openai"], help="ollama = local | openai = api"
     )
     model = LLM_BACKEND_TO_MODEL[llm_backend]
 
@@ -25,9 +23,7 @@ def main():
 
     st.subheader("Requête")
     query = st.text_area(
-        "Requête",
-        placeholder="Posez votre question",
-        label_visibility="collapsed"
+        "Requête", placeholder="Posez votre question", label_visibility="collapsed"
     )
 
     run = st.button("Lancer la recherche", type="primary")

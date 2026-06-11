@@ -31,8 +31,8 @@ def load_documents() -> list[Document]:
             metadata={
                 "title": data["title"],
                 "creator": data["creator"],
-                "source": filename.stem
-            }
+                "source": filename.stem,
+            },
         )
 
         documents.append(document)
@@ -47,7 +47,7 @@ def split_documents(documents: list[Document]) -> list[Document]:
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
-        separators=["\n\n", "\n", " ", ""]
+        separators=["\n\n", "\n", " ", ""],
     )
     return text_splitter.split_documents(documents)
 
@@ -57,8 +57,7 @@ def embedding_function():
     Create and return the embedding function.
     """
     embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        encode_kwargs={"normalize_embeddings": True}
+        model_name=EMBEDDING_MODEL, encode_kwargs={"normalize_embeddings": True}
     )
     return embeddings
 
@@ -67,10 +66,7 @@ def add_to_chroma(chunks: list[Document]):
     """
     Add new chunks to the Chroma database.
     """
-    db = Chroma(
-        persist_directory=CHROMA_PATH,
-        embedding_function=embedding_function()
-    )
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function())
 
     chunks_with_prefix = [prefix_document(chunk) for chunk in chunks]
     chunks_with_ids = calculate_chunk_ids(chunks_with_prefix)
@@ -97,8 +93,7 @@ def prefix_document(document: Document) -> Document:
     Prefix a document content with "passage: ".
     """
     return Document(
-        page_content="passage: " + document.page_content,
-        metadata=document.metadata
+        page_content="passage: " + document.page_content, metadata=document.metadata
     )
 
 

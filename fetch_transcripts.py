@@ -11,18 +11,12 @@ def get_video_metadata(video_id):
     Get video metadata (title and creator) from YouTube oEmbed API.
     """
     url = "https://www.youtube.com/oembed"
-    params = {
-        "url": f"https://www.youtube.com/watch?v={video_id}",
-        "format": "json"
-    }
+    params = {"url": f"https://www.youtube.com/watch?v={video_id}", "format": "json"}
 
     response = requests.get(url, params=params)
     video_info = response.json()
 
-    return {
-        "title": video_info["title"],
-        "creator": video_info["author_name"]
-    }
+    return {"title": video_info["title"], "creator": video_info["author_name"]}
 
 
 def fetch_video_transcript(video_id):
@@ -43,10 +37,7 @@ def main(video_ids):
         metadata = get_video_metadata(video_id)
         transcript = fetch_video_transcript(video_id)
 
-        document = {
-            **metadata,
-            "transcript": transcript
-        }
+        document = {**metadata, "transcript": transcript}
 
         with open(f"data/{video_id}.json", "w", encoding="utf-8") as file:
             json.dump(document, file, ensure_ascii=False, indent=4)

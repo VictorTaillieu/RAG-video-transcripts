@@ -1,6 +1,6 @@
 import streamlit as st
 
-from rag import query_rag
+from rag_app.rag import query_rag
 
 LLM_BACKEND_TO_MODEL = {
     "ollama": "mistral:7b",

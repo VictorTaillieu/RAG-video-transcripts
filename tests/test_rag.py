@@ -1,6 +1,6 @@
 from langchain_ollama import OllamaLLM
 
-from rag import query_rag
+from rag_app.rag import query_rag
 
 EVAL_PROMPT = """Tu es un évaluateur strict et factuel.
 

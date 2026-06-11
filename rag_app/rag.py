@@ -8,7 +8,7 @@ from langchain_ollama import OllamaLLM
 from langchain_openai import OpenAI
 from pydantic import SecretStr
 
-from populate_database import CHROMA_PATH, embedding_function
+from rag_app.populate_database import CHROMA_PATH, embedding_function
 
 load_dotenv()
 

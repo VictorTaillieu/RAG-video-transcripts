@@ -1,36 +1,13 @@
 import argparse
-import os
 
-from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.language_models import BaseChatModel
 from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
-from pydantic import SecretStr
 
-from rag_app.config import CHROMA_PATH
+from rag_app.config import settings
 from rag_app.populate_database import embedding_function
-
-load_dotenv()
-
-OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
-OPENROUTER_API_KEY = SecretStr(os.environ["OPENROUTER_API_KEY"])
-PROMPT_TEMPLATE = """Tu es un assistant précis et factuel.
-
-Règles :
-- Réponds uniquement à partir du CONTEXTE.
-- N'invente rien.
-- Si l'information n'est pas dans le contexte, réponds : "Je ne sais pas".
-
-CONTEXTE :
-{context}
-
-QUESTION :
-{question}
-
-RÉPONSE :
-"""
 
 
 def query_rag(
@@ -39,7 +16,10 @@ def query_rag(
     """
     Query the RAG system and return the response.
     """
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function())
+    db = Chroma(
+        persist_directory=settings.CHROMA_PATH,
+        embedding_function=embedding_function(),
+    )
 
     results = db.similarity_search_with_score("query: " + query_text, k=5)
 
@@ -64,8 +44,8 @@ def select_llm_backend(llm_backend: str) -> BaseChatModel:
         return ChatOpenAI(
             model="mistralai/mistral-small-3.2-24b-instruct",
             temperature=0,
-            base_url=OPENROUTER_API_BASE,
-            api_key=OPENROUTER_API_KEY,
+            base_url=settings.OPENROUTER_API_BASE,
+            api_key=settings.OPENROUTER_API_KEY,
         )
     else:
         raise ValueError(f"Unsupported LLM backend: {llm_backend}")

@@ -9,7 +9,7 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from rag_app.config import CHROMA_PATH, CHUNK_OVERLAP, CHUNK_SIZE, EMBEDDING_MODEL
+from rag_app.config import settings
 
 
 def load_documents() -> list[Document]:
@@ -41,8 +41,8 @@ def split_documents(documents: list[Document]) -> list[Document]:
     Split documents into chunks.
     """
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
+        chunk_size=settings.CHUNK_SIZE,
+        chunk_overlap=settings.CHUNK_OVERLAP,
         separators=["\n\n", "\n", " ", ""],
     )
     return text_splitter.split_documents(documents)
@@ -53,7 +53,8 @@ def embedding_function() -> HuggingFaceEmbeddings:
     Create and return the embedding function.
     """
     embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL, encode_kwargs={"normalize_embeddings": True}
+        model_name=settings.EMBEDDING_MODEL,
+        encode_kwargs={"normalize_embeddings": True},
     )
     return embeddings
 
@@ -62,7 +63,10 @@ def add_to_chroma(chunks: list[Document]) -> None:
     """
     Add new chunks to the Chroma database.
     """
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function())
+    db = Chroma(
+        persist_directory=settings.CHROMA_PATH,
+        embedding_function=embedding_function(),
+    )
 
     chunks_with_prefix = [prefix_document(chunk) for chunk in chunks]
     chunks_with_ids = calculate_chunk_ids(chunks_with_prefix)
@@ -120,8 +124,8 @@ def clear_database() -> None:
     """
     Clear the Chroma database.
     """
-    if os.path.exists(CHROMA_PATH):
-        shutil.rmtree(CHROMA_PATH)
+    if os.path.exists(settings.CHROMA_PATH):
+        shutil.rmtree(settings.CHROMA_PATH)
 
 
 if __name__ == "__main__":

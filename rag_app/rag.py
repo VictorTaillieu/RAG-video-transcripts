@@ -4,8 +4,9 @@ import os
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-from langchain_ollama import OllamaLLM
-from langchain_openai import OpenAI
+from langchain_core.language_models import BaseChatModel
+from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
 from rag_app.config import CHROMA_PATH
@@ -13,8 +14,8 @@ from rag_app.populate_database import embedding_function
 
 load_dotenv()
 
-MAMMOUTH_API_BASE = "https://api.mammouth.ai/v1"
-MAMMOUTH_API_KEY = SecretStr(os.environ["MAMMOUTH_API_KEY"])
+OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
+OPENROUTER_API_KEY = SecretStr(os.environ["OPENROUTER_API_KEY"])
 PROMPT_TEMPLATE = """Tu es un assistant précis et factuel.
 
 Règles :
@@ -48,24 +49,23 @@ def query_rag(
     prompt = PROMPT_TEMPLATE.format(context=context_text, question=query_text)
 
     model = select_llm_backend(llm_backend)
-    response = model.invoke(prompt)
+    response = str(model.invoke(prompt).content)
 
     return response, results
 
 
-def select_llm_backend(llm_backend: str) -> OllamaLLM | OpenAI:
+def select_llm_backend(llm_backend: str) -> BaseChatModel:
     """
     Select and return the LLM backend based on the provided name.
     """
     if llm_backend == "ollama":
-        return OllamaLLM(model="mistral", temperature=0)
+        return ChatOllama(model="mistral", temperature=0)
     elif llm_backend == "openai":
-        return OpenAI(
-            model="mistral-small-3.2-24b-instruct",
+        return ChatOpenAI(
+            model="mistralai/mistral-small-3.2-24b-instruct",
             temperature=0,
-            max_tokens=1024,
-            base_url=MAMMOUTH_API_BASE,
-            api_key=MAMMOUTH_API_KEY,
+            base_url=OPENROUTER_API_BASE,
+            api_key=OPENROUTER_API_KEY,
         )
     else:
         raise ValueError(f"Unsupported LLM backend: {llm_backend}")

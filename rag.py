@@ -52,7 +52,7 @@ def query_rag(
     return response, results
 
 
-def select_llm_backend(llm_backend: str):
+def select_llm_backend(llm_backend: str) -> OllamaLLM | OpenAI:
     """
     Select and return the LLM backend based on the provided name.
     """

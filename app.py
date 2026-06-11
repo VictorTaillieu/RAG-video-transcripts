@@ -8,7 +8,7 @@ LLM_BACKEND_TO_MODEL = {
 }
 
 
-def main():
+def main() -> None:
     st.set_page_config(page_title="RAG")
     st.title("RAG pour transcriptions vidéo")
 

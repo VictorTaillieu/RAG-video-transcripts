@@ -52,7 +52,7 @@ def split_documents(documents: list[Document]) -> list[Document]:
     return text_splitter.split_documents(documents)
 
 
-def embedding_function():
+def embedding_function() -> HuggingFaceEmbeddings:
     """
     Create and return the embedding function.
     """
@@ -62,7 +62,7 @@ def embedding_function():
     return embeddings
 
 
-def add_to_chroma(chunks: list[Document]):
+def add_to_chroma(chunks: list[Document]) -> None:
     """
     Add new chunks to the Chroma database.
     """
@@ -97,7 +97,7 @@ def prefix_document(document: Document) -> Document:
     )
 
 
-def calculate_chunk_ids(chunks):
+def calculate_chunk_ids(chunks: list[Document]) -> list[Document]:
     """
     Calculate unique IDs for each chunk based on its source and index.
     """
@@ -120,7 +120,7 @@ def calculate_chunk_ids(chunks):
     return chunks
 
 
-def clear_database():
+def clear_database() -> None:
     """
     Clear the Chroma database.
     """

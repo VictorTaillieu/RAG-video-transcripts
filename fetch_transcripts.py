@@ -6,7 +6,7 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 
 
-def get_video_metadata(video_id):
+def get_video_metadata(video_id: str) -> dict[str, str]:
     """
     Get video metadata (title and creator) from YouTube oEmbed API.
     """
@@ -19,7 +19,7 @@ def get_video_metadata(video_id):
     return {"title": video_info["title"], "creator": video_info["author_name"]}
 
 
-def fetch_video_transcript(video_id):
+def fetch_video_transcript(video_id: str) -> list[dict]:
     """
     Fetch the transcript of a YouTube video using the YouTube Transcript API.
     """
@@ -28,7 +28,7 @@ def fetch_video_transcript(video_id):
     return transcipt.to_raw_data()
 
 
-def main(video_ids):
+def main(video_ids: list[str]) -> None:
     Path("data").mkdir(exist_ok=True)
 
     for video_id in video_ids:

@@ -23,7 +23,7 @@ def load_documents() -> list[Document]:
     documents = []
 
     for filename in Path("data").glob("*.json"):
-        with open(filename, "r", encoding="utf-8") as file:
+        with open(filename, encoding="utf-8") as file:
             data = json.load(file)
 
         document = Document(

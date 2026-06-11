@@ -9,11 +9,7 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 80
-# 800/80 800/150 1000/150
-EMBEDDING_MODEL = "intfloat/multilingual-e5-base"
-CHROMA_PATH = "chroma_db"
+from rag_app.config import CHROMA_PATH, CHUNK_OVERLAP, CHUNK_SIZE, EMBEDDING_MODEL
 
 
 def load_documents() -> list[Document]:

@@ -5,6 +5,8 @@ from pathlib import Path
 import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 
+from rag_app.config import settings
+
 
 def get_video_metadata(video_id: str) -> dict[str, str]:
     """
@@ -29,7 +31,7 @@ def fetch_video_transcript(video_id: str) -> list[dict]:
 
 
 def main(video_ids: list[str]) -> None:
-    Path("data").mkdir(exist_ok=True)
+    Path(settings.RAW_DOCUMENTS_PATH).mkdir(exist_ok=True)
 
     for video_id in video_ids:
         print(f"Fetching {video_id}...")
@@ -39,7 +41,9 @@ def main(video_ids: list[str]) -> None:
 
         document = {**metadata, "transcript": transcript}
 
-        with open(f"data/{video_id}.json", "w", encoding="utf-8") as file:
+        with open(
+            f"{settings.RAW_DOCUMENTS_PATH}/{video_id}.json", "w", encoding="utf-8"
+        ) as file:
             json.dump(document, file, ensure_ascii=False, indent=4)
 
 

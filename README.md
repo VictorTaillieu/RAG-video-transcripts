@@ -4,7 +4,7 @@
 
 ### Fetch transcripts from YouTube video IDs
 ```bash
-uv run python -m rag_app.fetch_transcripts cFMhLbLSpz8 4xq6bVbS-Pw RVB3PBPxMWg ZoGH7d51bvc hmo2uQbpdbI tatogXG-Who vmOMdY1Ia-M
+uv run python -m rag_app.fetch_transcripts cFMhLbLSpz8 4xq6bVbS-Pw RVB3PBPxMWg ZoGH7d51bvc hmo2uQbpdbI tatogXG-Who vmOMdY1Ia-M qzCr2zp7xRI 9oRDksmH0zM arj7oStGLkU
 ```
 
 ### Populate the vector database

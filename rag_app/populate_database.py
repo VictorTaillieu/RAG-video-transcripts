@@ -6,6 +6,7 @@ from pathlib import Path
 
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
+from langchain_core.embeddings import Embeddings
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -14,11 +15,11 @@ from rag_app.config import settings
 
 def load_documents() -> list[Document]:
     """
-    Load documents from the "data" directory.
+    Load raw documents and format them as Document objects.
     """
     documents = []
 
-    for filename in Path("data").glob("*.json"):
+    for filename in Path(settings.RAW_DOCUMENTS_PATH).glob("*.json"):
         with open(filename, encoding="utf-8") as file:
             data = json.load(file)
 
@@ -43,12 +44,12 @@ def split_documents(documents: list[Document]) -> list[Document]:
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=settings.CHUNK_SIZE,
         chunk_overlap=settings.CHUNK_OVERLAP,
-        separators=["\n\n", "\n", " ", ""],
+        separators=settings.SEPARATORS,
     )
     return text_splitter.split_documents(documents)
 
 
-def embedding_function() -> HuggingFaceEmbeddings:
+def embedding_function() -> Embeddings:
     """
     Create and return the embedding function.
     """

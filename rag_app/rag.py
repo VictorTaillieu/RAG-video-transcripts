@@ -41,11 +41,11 @@ def select_llm_backend(llm_backend: str) -> BaseChatModel:
     Select and return the LLM backend based on the provided name.
     """
     if llm_backend == "ollama":
-        return ChatOllama(model="mistral", temperature=0)
+        return ChatOllama(model=settings.LOCAL_MODEL, temperature=settings.TEMPERATURE)
     elif llm_backend == "openai":
         return ChatOpenAI(
-            model="mistralai/mistral-small-3.2-24b-instruct",
-            temperature=0,
+            model=settings.API_MODEL,
+            temperature=settings.TEMPERATURE,
             base_url=settings.OPENROUTER_API_BASE,
             api_key=settings.OPENROUTER_API_KEY,
         )
